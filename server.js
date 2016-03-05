@@ -15,9 +15,16 @@ var testSchema = mongoose.Schema({ name: String }),
 
 var testDoc = new Test({ name: "George" });
 
+// Save a test doc to db, uses methods on specific instance of model
 testDoc.save(function(err, testDoc) {
     if(err) { console.log(err); }
     console.log(testDoc);
+});
+
+// Recall test doc, using model protoype
+Test.find(function(err, tests) {
+  if (err) { console.error(err); }
+  console.log(tests);
 });
     
     
@@ -31,9 +38,16 @@ app.use('/imgsearch/*', function(req, res) {
           {top: 5},
           function(err, results) {
             if(err) { console.log(err); }
-              var response = util.inspect(results, 
-              {colors: true, depth: null});
-              res.send(response);
+              
+              
+              var newDoc = new Test({ name: results });
+              
+              newDoc.save(function(err, newDoc) {
+                if(err) { console.log(err); }
+                console.log(newDoc);
+              });
+              
+              res.send(results);
             }
         );
     }
