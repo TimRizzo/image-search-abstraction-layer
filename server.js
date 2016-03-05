@@ -1,13 +1,29 @@
 var express = require('express'),
     app = express(),
+    mongoose = require('mongoose'),
+    Schema = mongoose.Schema,
     Search = require('bing.search'),
     util = require('util');
     
+    
+    
 require('dotenv').load();
+mongoose.connect(process.env.MONGO_URI);
+
+var testSchema = mongoose.Schema({ name: String }),
+    Test = mongoose.model('Test', testSchema);
+
+var testDoc = new Test({ name: "George" });
+
+testDoc.save(function(err, testDoc) {
+    if(err) { console.log(err); }
+    console.log(testDoc);
+});
+    
     
 var search = new Search(process.env.BING_KEY);
 
-app.use('/*', function(req, res) {
+app.use('/imgsearch/*', function(req, res) {
     console.log(req.params['0']);
     if(req.params['0'] !== "favicon.ico" && req.params['0'] !== "") {
         
